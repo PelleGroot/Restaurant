@@ -14,15 +14,24 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 public class CategoriesRequest implements Response.Listener<JSONObject>, Response.ErrorListener {
+    public Context context;
+    public Callback activity;
+
+    // add the callback methods
+    public interface Callback{
+        void gotCategories(ArrayList<String> categories);
+        void gotCategoriesError(String message);
+    }
 
     // the constructor
-    public CategoriesRequest(Context context) {
-        // TODO: I feel like I'm not doing something right here.
+    public CategoriesRequest(Context activityContext){
+        context = activityContext;
     }
 
     @Override
     public void onErrorResponse(VolleyError error) {
         // TODO: Make a clear and working error message
+        activity.gotCategoriesError(error.getMessage());
         Log.d("onErrorResponse:", "Error");
     }
 
@@ -42,17 +51,12 @@ public class CategoriesRequest implements Response.Listener<JSONObject>, Respons
             }catch(JSONException e){
                 e.printStackTrace();
             }
-            Log.d("ArrayList :", "" + arrayList.get(i));
+       activity.gotCategories(arrayList);
         }
     }
 
-    // add the callback methods
-    public interface Callback{
-        void gotCategories(ArrayList<String> categories);
-        void gotCategoriesError(String message);
-    }
-
-    public void getCategories(Callback activity) {
+    public void getCategories(Callback activityCategories) {
+        activity = activityCategories;
         // create a request queue
         RequestQueue queue = Volley.newRequestQueue(context);
         // create a JsonObjectRequest And add it to the queue
