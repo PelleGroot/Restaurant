@@ -32,7 +32,6 @@ public class CategoriesRequest implements Response.Listener<JSONObject>, Respons
     public void onErrorResponse(VolleyError error) {
         // TODO: Make a clear and working error message
         activity.gotCategoriesError(error.getMessage());
-        Log.d("onErrorResponse:", "Error");
     }
 
     @Override
