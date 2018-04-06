@@ -1,6 +1,8 @@
 package nl.pellegroot.restaurant;
 
-public class MenuItem {
+import java.io.Serializable;
+
+public class MenuItem implements Serializable{
 String name;
 String description;
 String imageUrl;

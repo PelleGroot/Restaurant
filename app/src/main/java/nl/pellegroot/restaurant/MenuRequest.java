@@ -9,6 +9,8 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -34,18 +36,42 @@ public class MenuRequest implements Response.Listener<JSONObject>, Response.Erro
 
     @Override
     public void onResponse(JSONObject response) {
+        JSONArray jsonArray;
+        ArrayList<MenuItem> menuList = new ArrayList<>();
 
-        activity.gotMenu();
+        try{
+            jsonArray = response.getJSONArray("items");
+
+            for(int i=0; i<jsonArray.length(); i++){
+                    JSONObject jsonObject = jsonArray.getJSONObject(i);
+                    MenuItem item = new MenuItem();
+
+                    // set all the json object attributes to the menu item attributes
+                    item.setName(jsonObject.getString("name"));
+                    item.setDescription(jsonObject.getString("description"));
+                    item.setImageUrl(jsonObject.getString("image_url"));
+                    item.setPrice(jsonObject.getDouble("price"));
+                    item.setCategory(jsonObject.getString("category"));
+
+                    // add the menu item to the menulist
+                    menuList.add(item);
+            }
+        } catch (JSONException e){
+                e.printStackTrace();
+            }
+
+        activity.gotMenu(menuList);
     }
 
-    public void getMenu(Callback activityMenu){
+    public void getMenu(Callback activityMenu, String category){
         activity = activityMenu;
 
         // create a request queue
         RequestQueue queue = Volley.newRequestQueue(context);
 
+        String url = "https://resto.mprog.nl/menu?category=" + category;
         // create a JsonObjectRequest And add it to the queue
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest("https://resto.mprog.nl/menu", null, this, this);
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(url, null, this, this);
         queue.add(jsonObjectRequest);
     }
 }

@@ -1,7 +1,6 @@
 package nl.pellegroot.restaurant;
 
 import android.content.Context;
-import android.util.Log;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -30,28 +29,28 @@ public class CategoriesRequest implements Response.Listener<JSONObject>, Respons
 
     @Override
     public void onErrorResponse(VolleyError error) {
-        // TODO: Make a clear and working error message
+        // foward the error message
         activity.gotCategoriesError(error.getMessage());
     }
 
     @Override
     public void onResponse(JSONObject response) {
-        JSONArray jsonArray = null;
+        JSONArray jsonArray;
         ArrayList<String> arrayList = new ArrayList();
         try {
-            // transform the response to an arraylist
+            // get the data as an jsonArray
             jsonArray = response.getJSONArray("categories");
-        } catch(JSONException e){
-            e.printStackTrace();
-        }
-        for(int i=0; i<jsonArray.length(); i++){
-            try{
+
+            // loop through the Jsonarray and put all values in an arraylist
+            for (int i = 0; i < jsonArray.length(); i++) {
                 arrayList.add(jsonArray.getString(i));
-            }catch(JSONException e){
+            }
+        }catch(JSONException e){
                 e.printStackTrace();
             }
+
        activity.gotCategories(arrayList);
-        }
+
     }
 
     public void getCategories(Callback activityCategories) {

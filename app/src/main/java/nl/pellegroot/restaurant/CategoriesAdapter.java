@@ -24,13 +24,16 @@ public class CategoriesAdapter extends ArrayAdapter<ArrayList> {
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
         if (convertView == null) {
-            convertView = LayoutInflater.from(getContext()).inflate(R.layout.list_item, parent, false);
+            convertView = LayoutInflater.from(getContext()).inflate(R.layout.category_item, parent, false);
         }
 
-        TextView textView = (TextView)convertView.findViewById(R.id.textView);
+        // set the textview
+        TextView textView = (TextView) convertView.findViewById(R.id.textView);
 
+        // get the categories
         String categorie = categories.get(position).toString();
 
+        // set the text
         textView.setText(categorie);
 
         return convertView;
